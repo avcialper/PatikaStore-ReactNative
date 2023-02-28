@@ -1,31 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, FlatList, TextInput } from "react-native";
 import products from "./products.json";
 import ProductCard from "./component/ProductCard/index";
+import Search from "./component/SearchBox";
 
 const App = () => {
 
+  const [productList, setProductList] = useState(products)
+
   // Gets designed product card.
   const renderProduts = ({ item }) => <ProductCard product={item} />
-  const [text, onChangeText] = React.useState("");
+
+  // Search function.
+  const searchProduct = text => {
+    const filterData = products.filter(product => {
+      const searchedInput = text.toLocaleLowerCase();
+      const produtsName = product.title.toLocaleLowerCase();
+      return produtsName.indexOf(searchedInput) > -1;
+    })
+    setProductList(filterData);
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>PATIKASTORE</Text>
+      <Search
+        setInput={searchProduct}
+      />
       <FlatList
-        data={products}
-        renderItem={renderProduts}
         keyExtractor={item => item.id.toString()}
-        numColumns={2}      // To indicate how many product in one row.
-        ListHeaderComponent={
-          <TextInput
-            style={styles.source_area}
-            onChangeText={onChangeText}
-            value={text}
-            placeholder="PatikaStore' da ara"
-            placeholderTextColor='#810181'
-          />
-        }
+        data={productList}
+        renderItem={renderProduts}
+        numColumns={2}
       />
     </View>
   );
@@ -40,7 +46,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft: 10,
   },
-  source_area: {
+  search: {
     backgroundColor: '#eceff1',
     color: 'black',
     borderRadius: 10,

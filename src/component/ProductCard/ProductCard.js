@@ -13,7 +13,8 @@ const ProductCard = ({ product }) => {
                 <Text style={styles.product_name}>{product.title}</Text>
                 <Text style={styles.product_price}>{product.price}</Text>
                 {
-                    product.inStock === false && <Text style={styles.stock}>STOKTA YOK</Text>
+                    product.inStock === false && 
+                    <Text style={styles.stock}>STOKTA YOK</Text>
                 }
             </View>
         </View>
